@@ -1,11 +1,14 @@
+import { useReducer } from 'react'
 import MenuItem from './components/MenuItem'
 import OrderContents from './components/OrderContents'
 import OrderTotals from './components/OrderTotals'
 import TipPercentageForm from './components/TipPercentageForm'
 import { menuItems } from './data/db'
-import { useOrder } from './hooks/useOrder'
+import { intialState, orderReduce } from './reducers/orderReducer'
+
 function App() {
-    const { addItem, order, removeItem, tip, setTip, placeOrder } = useOrder()
+    const [state, dispatch] = useReducer(orderReduce, intialState)
+
     return (
         <>
             <header className=" bg-teal-400 py-5">
@@ -21,23 +24,26 @@ function App() {
                             <MenuItem
                                 key={item.id}
                                 item={item}
-                                addItem={addItem}
+                                dispatch={dispatch}
                             />
                         ))}
                     </div>
                 </div>
                 <div className=" border border-dashed border-slate-300 p-5 rounded-lg space-y-10">
-                    {order.length ? (
+                    {state.order.length ? (
                         <>
                             <OrderContents
-                                order={order}
-                                removeItem={removeItem}
+                                order={state.order}
+                                dispatch={dispatch}
                             />
-                            <TipPercentageForm setTip={setTip} tip={tip} />
+                            <TipPercentageForm
+                                dispatch={dispatch}
+                                tip={state.tip}
+                            />
                             <OrderTotals
-                                order={order}
-                                tip={tip}
-                                placeOrder={placeOrder}
+                                order={state.order}
+                                tip={state.tip}
+                                dispatch={dispatch}
                             />
                         </>
                     ) : (
