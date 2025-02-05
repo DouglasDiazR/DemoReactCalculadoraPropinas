@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
 import MenuItem from './components/MenuItem'
 import OrderContents from './components/OrderContents'
 import OrderTotals from './components/OrderTotals'
@@ -8,6 +8,14 @@ import { intialState, orderReduce } from './reducers/orderReducer'
 
 function App() {
     const [state, dispatch] = useReducer(orderReduce, intialState)
+
+    useEffect(() => {
+        localStorage.setItem('order', JSON.stringify(state.order))
+    }, [state.order])
+
+    useEffect(() => {
+        localStorage.setItem('tip', JSON.stringify(state.tip))
+    }, [state.tip])
 
     return (
         <>
